@@ -1,0 +1,45 @@
+/* GENERAL */
+body {
+    background-color: #F8FAFC;
+}
+
+/* BUTTONS */
+.btn {
+    border-radius: 10px;
+}
+
+/* CARDS */
+.card {
+    border-radius: 14px;
+}
+
+/* MOBILE TWEAKS */
+@media (max-width: 768px) {
+
+    h4 {
+        font-size: 1.1rem;
+    }
+
+    .card-title {
+        font-size: 1rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+}
+
+.modal-content {
+    border-radius: 16px;
+}
+
+.modal-body ul li {
+    font-size: 0.95rem;
+}
+
+.alert-info {
+    background-color: #EFF6FF;
+    border-color: #BFDBFE;
+    color: #1E40AF;
+}
+
