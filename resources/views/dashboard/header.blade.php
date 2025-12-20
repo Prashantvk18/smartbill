@@ -1,31 +1,68 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ $title ?? 'Dashboard | CrickTeam' }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </head>
 <body>
 
-<!-- TOP MENU BAR -->
-<nav class="navbar navbar-expand-lg bg-white shadow-sm px-4 py-2">
-    <a class="navbar-brand fw-bold text-primary" href="#">
-        SmartBill
-    </a>
+<div class="navbar">
+    <div class="logo">SmartBill</div>
 
-    <div class="ms-auto d-flex align-items-center gap-3">
-        <a href="/dashboard" class="text-decoration-none text-dark fw-medium">Home</a>
-        <a href="/profile" class="text-decoration-none text-dark fw-medium">Profile</a>
+    <!-- Hamburger -->
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+
+    <!-- Menu -->
+    <div class="menu" id="menu">
+        <a href="{{ route('dashboard.home') }}" class="menu-link">Home</a>
+        <a class="nav-link">
+        👤 Profile
+        </a>
         @if(auth()->user()->is_admin)
-            <a href="{{ route('admin.settings') }}" class="nav-link">
-                ⚙️ Settings
-            </a>
+                <a class="nav-link" href="{{ route('admin.settings') }}">
+                    ⚙️ Settings
+                </a>
+            
         @endif
-
-        <a href="/logout" class="btn btn-outline-danger btn-sm">Logout</a>
+        <a href="{{ route('logout') }}" class="menu-link">Logout</a>
     </div>
-</nav>
+</div>
+
+
+<div class="content">
+<script>
+
+function toggleMenu() {
+    document.getElementById('menu').classList.toggle('show');
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.menu-link').forEach(link => {
+        link.addEventListener('click', () => {
+            document.getElementById('menu').classList.remove('show');
+        });
+    });
+});
+
+function goBack() {
+    if (document.referrer !== "") {
+        window.history.back();
+    } else {
+        window.location.href = "{{ route('dashboard.home') }}";
+    }
+}
+
+
+</script>
+
+

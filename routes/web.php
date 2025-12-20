@@ -14,7 +14,7 @@ Route::group(['middleware' => 'guest'],function() {
 
 Route::middleware(['checkedloggedin'])->group(function () {
     require __DIR__ . '/web_routes/home_routes.php'; 
-    require __DIR__ . '/web_routes/settings_controller_routes.php'; 
+    require __DIR__ . '/web_routes/globaladmincontoller_routes.php'; 
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
