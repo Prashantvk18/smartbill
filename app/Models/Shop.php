@@ -11,6 +11,7 @@ class Shop extends Model
 
     protected $fillable = [
         'shop_name',
+        'shop_code',
         'owner_id',
         'created_by',
         'updated_by',
@@ -18,5 +19,13 @@ class Shop extends Model
         'paid_amount',
         'dop',
         'doe',
+        'signature_path',
+        'stamp_path',
     ];
+
+    public function bills()
+{
+    return $this->hasMany(BillData::class, 'shop_id');
+}
+
 }

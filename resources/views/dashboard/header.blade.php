@@ -16,16 +16,17 @@
 </head>
 <body>
 
-<div class="navbar">
+<div class="navbar ">
     <div class="logo">SmartBill</div>
 
     <!-- Hamburger -->
     <div class="hamburger" onclick="toggleMenu()">☰</div>
 
     <!-- Menu -->
+     
     <div class="menu" id="menu">
         <a href="{{ route('dashboard.home') }}" class="menu-link">Home</a>
-        <a class="nav-link">
+        <a class="nav-link" href="{{ route('profile.index') }}">
         👤 Profile
         </a>
         @if(auth()->user()->is_admin)

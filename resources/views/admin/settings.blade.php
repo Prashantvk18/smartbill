@@ -148,7 +148,7 @@
                     </div>
 
                     <small class="text-muted">
-                        Expiry will be set automatically (6 months)
+                        Expiry will be set automatically (12 months)
                     </small>
 
                 </div>
@@ -244,7 +244,7 @@ function openshopPaymentModal(id, name, isPaid, amount, dop) {
         activateSection.style.display = 'block';
         deactivateSection.style.display = 'none';
 
-        document.getElementById('paymentAmount').value = amount || 500;
+        document.getElementById('paymentAmount').value = amount || 1000;
         document.getElementById('paymentDate').value = dop || '';
 
         form.action = "{{ route('admin.shop.activate') }}";

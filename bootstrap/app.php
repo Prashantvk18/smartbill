@@ -5,6 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\CheckedLoggedIn;
 use App\Http\Middleware\CheckGlobalAdmin;
+use App\Http\Middleware\CheckShopPaid;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
        $middleware->alias([
             'checkedloggedin' => CheckedLoggedIn::class,
+            'shopPaid' => CheckShopPaid::class,
             'globaladmin' => CheckGlobalAdmin::class,
         ]);
     })

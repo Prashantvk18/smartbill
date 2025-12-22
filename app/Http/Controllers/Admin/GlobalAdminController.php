@@ -44,13 +44,13 @@ public function activateshop(Request $request)
         'dop'     => 'required|date',
     ]);
 
-    $doe = \Carbon\Carbon::parse($request->dop)->addMonths(6);
+    $doe = \Carbon\Carbon::parse($request->dop)->addMonths(12);
 
     $shop = shop::find($request->shop_id);
 
     // Update shop
     $shop->is_paid = 1;
-    $shop->amount  = $request->amount;
+    $shop->paid_amount  = $request->amount;
     $shop->dop     = $request->dop;
     $shop->doe     = $doe;
     $shop->save();
@@ -77,7 +77,7 @@ public function deactivateshop(Request $request)
     $shop = shop::find($request->shop_id);
 
     $shop->is_paid = 0;
-    $shop->amount  = null;
+    $shop->paid_amount  = null;
     $shop->dop     = null;
     $shop->doe     = null;
     $shop->updated_by = auth()->id();

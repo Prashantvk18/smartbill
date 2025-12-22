@@ -16,8 +16,7 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>Team</th>
-                            <th>Team Code</th>
+                            <th>Shop</th>
                             <th>Amount</th>
                             <th>Payment Date</th>
                             <th>Expiry Date</th>
@@ -27,8 +26,7 @@
                     <tbody>
                     @forelse($payments as $payment)
                         <tr>
-                            <td>{{ $payment->team->team_name }}</td>
-                            <td>{{ $payment->team->team_code }}</td>
+                            <td>{{ $payment->shop->shop_name }}</td>
                             <td>₹{{ $payment->amount }}</td>
                             <td>{{ \Carbon\Carbon::parse($payment->dop)->format('d M Y') }}</td>
                             <td>{{ \Carbon\Carbon::parse($payment->doe)->format('d M Y') }}</td>

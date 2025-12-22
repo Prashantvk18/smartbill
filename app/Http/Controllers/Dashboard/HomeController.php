@@ -20,9 +20,13 @@ class HomeController extends Controller
         $request->validate([
             'shop_name' => 'required|string|max:255',
         ]);
+    do {
+        $code = rand(10000, 99999);
+    } while (Team::where('team_code', $code)->exists());
 
         Shop::create([
             'shop_name'   => $request->shop_name,
+            'shop_code'   => $code,
             'owner_id'    => Auth::id(),
             'created_by'  => Auth::id(),
             'updated_by'  => Auth::id(),
