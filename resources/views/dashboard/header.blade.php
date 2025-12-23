@@ -17,7 +17,7 @@
 <body>
 
 <div class="navbar ">
-    <div class="logo">SmartBill</div>
+    <div class="logo">SmartBill <small>Hii {{ auth()->user()->name }}</small></div>
 
     <!-- Hamburger -->
     <div class="hamburger" onclick="toggleMenu()">☰</div>

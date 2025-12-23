@@ -1,7 +1,7 @@
 
 
 <!-- CONTENT -->
- @include('dashboard.header', ['title' => 'Feedback'])
+ @include('dashboard.header', ['title' => 'SmartBill | Dashboard'])
 <div class="container mt-3">
 
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">

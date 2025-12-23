@@ -1,4 +1,4 @@
- @include('dashboard.header', ['title' => 'Feedback'])
+ @include('dashboard.header', ['title' => 'Shop Dashboard | SmartBill'])
 
 <div class="container mt-3">
 
