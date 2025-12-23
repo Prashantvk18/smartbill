@@ -3,7 +3,7 @@
 <div class="container mt-3">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>Shop Dashboard</h4>
+        <h4>{{$shop_name}} Dashboard</h4>
         <button class="btn btn-primary"
                 data-bs-toggle="modal"
                 data-bs-target="#billModal">

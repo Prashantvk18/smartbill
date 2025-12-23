@@ -31,6 +31,7 @@ class HomeController extends Controller
                 'shop_code'   => $code,
                 'owner_id'    => Auth::id(),
                 'created_by'  => Auth::id(),
+                'updated_by'  => 0,
             ];
         }else{
              $data = [

@@ -22,7 +22,7 @@ class ShopDashboardController extends Controller
 
     $query = BillData::with('items')->where('shop_id', $shop)
         ->whereBetween('bill_date', [$from, $to]);
-
+    $shop_name = Shop::find($shop)->shop_name;
     // Search filter
     if ($request->search_type && $request->search_value) {
         $query->where($request->search_type, 'like', '%' . $request->search_value . '%');
@@ -34,7 +34,8 @@ class ShopDashboardController extends Controller
         'bills',
         'from',
         'to',
-        'shop'
+        'shop',
+        'shop_name'
     ));
 }
 }
