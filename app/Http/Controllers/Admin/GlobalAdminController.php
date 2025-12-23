@@ -77,7 +77,7 @@ public function deactivateshop(Request $request)
     $shop = shop::find($request->shop_id);
 
     $shop->is_paid = 0;
-    $shop->paid_amount  = null;
+    $shop->paid_amount  = 0;
     $shop->dop     = null;
     $shop->doe     = null;
     $shop->updated_by = auth()->id();

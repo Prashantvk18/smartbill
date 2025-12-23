@@ -20,7 +20,7 @@ class ShopDashboardController extends Controller
     $from = $request->from_date ?? Carbon::now()->startOfMonth()->toDateString();
     $to   = $request->to_date   ?? Carbon::now()->endOfMonth()->toDateString();
 
-    $query = BillData::where('shop_id', $shop)
+    $query = BillData::with('items')->where('shop_id', $shop)
         ->whereBetween('bill_date', [$from, $to]);
 
     // Search filter
@@ -33,7 +33,8 @@ class ShopDashboardController extends Controller
     return view('shop.dashboard', compact(
         'bills',
         'from',
-        'to'
+        'to',
+        'shop'
     ));
 }
 }

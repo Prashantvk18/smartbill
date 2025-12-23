@@ -79,8 +79,9 @@
             <tbody>
 
             @forelse($bills as $bill)
-                <tr>
-                    <td>{{ $bill->bill_no }}</td>
+               <tr style="cursor:pointer;">
+
+                    <td onclick='openEditBill(@json($bill))'>{{ $bill->bill_no }}</td>
                     <td>{{ $bill->bill_date }}</td>
                     <td>{{ $bill->customer_name ?? '-' }}</td>
                     <td>{{ $bill->whatsapp_number ?? '-' }}</td>
@@ -109,17 +110,37 @@
                             && \Carbon\Carbon::parse($bill->pdf_generate_date)->addDays(30)->isFuture();
                     @endphp
 
-                    <td>
-                        @if($pdfValid)
+                   <td>
+                        @if($bill->hasPdf())
+
                             {{-- VIEW PDF --}}
-                            <a href="{{ route('bill.pdf.generate', $bill->id) }}"
+                            <a  href="{{ route('bill.pdf.internal', $bill->id) }}"
                             target="_blank"
-                            class="btn btn-outline-success btn-sm">
+                            class="btn btn-outline-success btn-sm mb-1">
                                 📄 View PDF
                             </a>
+
+                            {{-- SEND PDF --}}
+                            <a href="{{ route('bill.pdf.send', $bill->id) }}"
+                            class="btn btn-success btn-sm mb-1">
+                                📲 Send
+                            </a>
+
+                            {{-- REMOVE PDF --}}
+                            <form method="POST"
+                                action="{{ route('bill.pdf.remove', $bill->id) }}"
+                                class="d-inline">
+                                @csrf
+                                <button class="btn btn-outline-danger btn-sm"
+                                        onclick="return confirm('Remove existing PDF?')">
+                                    🗑 Remove
+                                </button>
+                            </form>
+
                         @else
+
                             {{-- GENERATE PDF --}}
-                            <a href="{{ route('bill.pdf.generate', $bill->id) }}"
+                            <a href="{{ route('bill.pdf.internal', $bill->id) }}"
                             class="btn btn-outline-primary btn-sm mb-1">
                                 ⚙️ Generate PDF
                             </a>
@@ -129,6 +150,7 @@
                             class="btn btn-success btn-sm">
                                 📲 G/S PDF
                             </a>
+
                         @endif
                     </td>
 

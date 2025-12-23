@@ -53,4 +53,10 @@ class BillData extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function hasPdf()
+    {
+        return !empty($this->pdf_path) && file_exists(storage_path('app/public/' . $this->pdf_path));
+    }
+
 }

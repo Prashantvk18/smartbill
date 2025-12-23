@@ -102,6 +102,38 @@
         .clear {
             clear: both;
         }
+
+       
+
+.signature,
+.stamp {
+    width: 45%;
+    text-align: center;
+}
+
+
+.stamp {
+    float: left;
+}
+
+.signature img,
+.stamp img {
+    max-width: 120px;   /* 👈 small & professional */
+    max-height: 60px;
+    object-fit: contain;
+}
+
+.signature p,
+.stamp p {
+    margin-top: 5px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.clear {
+    clear: both;
+}
+
     </style>
 </head>
 
@@ -168,23 +200,35 @@
 </table>
 
 <div class="signature-box">
-    @if($bill->is_stamp)
+
+    {{-- STAMP --}}
+    @if($bill->is_stamp && $shop->stamp_path)
         <div class="stamp">
+            <img src="{{ public_path('storage/' . $shop->stamp_path) }}" alt="Stamp">
             <p>Stamp</p>
         </div>
     @endif
 
-    @if($bill->is_sign)
+    {{-- SIGNATURE --}}
+    @if($bill->is_sign && $shop->signature_path)
+    @php
+        $signaturePath = storage_path('app/public/' . $shop->signature_path);
+    @endphp
+
+    @if(file_exists($signaturePath))
         <div class="signature">
+            <img src="file://{{ $signaturePath }}"
+                 style="height:60px; max-width:150px;">
             <p>Authorized Signature</p>
         </div>
     @endif
-
+@endif
     <div class="clear"></div>
 </div>
 
+
 @if($bill->is_warranty || $bill->is_guarantee)
-    <p><b>Details:</b> {{ $bill->details }}</p>
+    <p><b>Note:</b> {{ $bill->details }}</p>
 @endif
 
 <div class="footer">

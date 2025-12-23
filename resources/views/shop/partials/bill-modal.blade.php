@@ -7,6 +7,7 @@
 
     .toggle-box {
     transition: all 0.3s ease;
+    }
 }
 /* Modal container */
 .modal-content {
@@ -75,6 +76,12 @@
     font-weight: 600;
     color: #0369A1;
 }
+.items-scroll {
+    max-height: 260px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
 
 .modal-body input[type="checkbox"] {
     margin-right: 6px;
@@ -85,9 +92,29 @@
     margin-bottom: 6px;
 }
 
+/* Ensure modal fits screen */
+.modal-dialog {
+    height: 95vh;
+}
+
+/* Make body scrollable */
+.modal-body {
+    overflow-y: auto;
+    max-height: calc(95vh - 140px); /* header + footer space */
+}
+
+/* Keep footer always visible */
+.modal-footer {
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    z-index: 10;
+}
+
+
 #warrantyInput,
 #guaranteeInput,
-#balanceInput {
+#balanceInput1 {
     background: #ffffff;
     border-radius: 12px;
     padding: 10px;
@@ -112,18 +139,21 @@
     }
 }
 
-}
+
 
 </style>
 <div class="modal fade" id="billModal" tabindex="-1">
-    <div class="modal-dialog modal-xl modal-fullscreen-sm-down modal-dialog-scrollable">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
 
             <form method="POST" action="{{ route('bill.store') }}">
                 @csrf
+                <input type="hidden" name="shop_id" value="{{$shop}}">
+                <input type="hidden" name="bill_id" id="billId1" value="0">
+                <input type="hidden" name="mode" id="billMode" value="create">
 
                 <div class="modal-header">
-                    <h5 class="modal-title">Create Bill</h5>
+                    <h5 class="modal-title" id="billModalTitle">Create Bill</h5>
                     <button type="button"
                             class="btn-close"
                             data-bs-dismiss="modal"
@@ -150,28 +180,30 @@
 
                     {{-- ITEMS --}}
                     <div id="itemRowTemplate" class="d-none">
-    <div class="row g-2 mb-2 item-row align-items-center">
-        <div class="col-12 col-md-5">
-            <input type="text" class="form-control"
-                   name="item_name[]" placeholder="Item Name">
-        </div>
-        <div class="col-4 col-md-2">
-            <input type="number" class="form-control qty"
-                   name="quantity[]" placeholder="Qty">
-        </div>
-        <div class="col-4 col-md-2">
-            <input type="number" class="form-control price"
-                   name="price[]" placeholder="Price">
-        </div>
-        <div class="col-4 col-md-1 text-center">
-            <button type="button"
-                    class="btn btn-outline-danger btn-sm"
-                    onclick="removeItem(this)">
-                ✕
-            </button>
-        </div>
-    </div>
-</div>
+                        <div id="itemRowTemplate" class="d-none">
+                            <div class="row g-2 mb-2 item-row align-items-center">
+                                <div class="col-12 col-md-5">
+                                    <input type="text" class="form-control"
+                                        name="item_name[]" placeholder="Item Name">
+                                </div>
+                                <div class="col-4 col-md-2">
+                                    <input type="number" class="form-control qty"
+                                        name="quantity[]" placeholder="Qty">
+                                </div>
+                                <div class="col-4 col-md-2">
+                                    <input type="number" class="form-control price"
+                                        name="price[]" placeholder="Price">
+                                </div>
+                                <div class="col-4 col-md-1 text-center">
+                                    <button type="button"
+                                            class="btn btn-outline-danger btn-sm"
+                                            onclick="removeItem(this)">
+                                        ✕
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div id="itemsContainer">
                         <div class="row g-2 mb-2 item-row align-items-center">
@@ -190,7 +222,7 @@
                                         onclick="removeItem(this)">
                                     ✕
                                 </button>
-                            </div>
+                            </div> 
                         </div>
 
                     </div>
@@ -227,14 +259,21 @@
                             <input type="checkbox" id="warranty"
                                    name="is_warranty"
                                    value="1"
-                                   onclick="toggleWarranty()"> Warranty
+                                   onclick="toggleWarranty()"> Warranty/Guarantee
                         </div>
-                        <div class="col-md-3">
+                        <!-- <div class="col-md-3">
                             <input type="checkbox" id="guarantee"
                                    name="is_guarantee"
                                    value="1"
-                                   onclick="toggleGuarantee()"> Guarantee
+                                   onclick="toggleGuarantee()"> Warranty/
+                        </div> -->
+                        <div class="col-md-3">
+                            <input type="checkbox" id="balance1"
+                                   name="is_balance1"
+                                   value="1"
+                                   onclick="toggleBalance()"> Balance
                         </div>
+                        
                     </div>
 
                     {{-- WARRANTY / GUARANTEE DETAILS --}}
@@ -244,26 +283,22 @@
                                name="details"
                                placeholder="Warranty details">
                     </div>
-
-                    <div id="guaranteeInput" class="mt-2 d-none">
+                    <!-- <div id="guaranteeInput" class="mt-2 d-none">
                         <input type="text"
                                class="form-control"
                                name="details"
                                placeholder="Guarantee details">
+                    </div> -->
+
+                    <div id="balanceInput1" class="mt-2 d-none">
+                        <input type="text"
+                               class="form-control"
+                               name="balance1"
+                               placeholder="Balance details">
                     </div>
 
                     {{-- BALANCE --}}
-                    <div class="mt-2">
-                        <input type="checkbox" onclick="toggleBalance()"> Balance
-                    </div>
-
-                    <div id="balanceInput" class="mt-2 d-none">
-                        <input type="number"
-                               class="form-control"
-                               name="balance"
-                               placeholder="Balance Amount"
-                               min="0">
-                    </div>
+                 
 
                     {{-- WHATSAPP --}}
                     <div class="mt-3">
@@ -278,20 +313,34 @@
 
                 {{-- FOOTER BUTTONS --}}
                     <div class="modal-footer gap-2">
-                        <button type="submit"
-                                name="action"
-                                value="send"
-                                class="btn btn-success px-4 fw-semibold">
-                            📲 Send Bill
-                        </button>
 
-                        <button type="submit"
-                                name="action"
-                                value="save"
-                                class="btn btn-outline-primary px-4 fw-semibold">
-                            💾 Save Bill
-                        </button>
-                    </div>
+                {{-- CREATE MODE --}}
+                <div id="createButtons" class="w-100 d-flex gap-2">
+                    <button type="submit"
+                            name="action"
+                            value="send"
+                            class="btn btn-success px-4 fw-semibold w-100">
+                        📲 Send Bill
+                    </button>
+
+                    <button type="submit"
+                            name="action"
+                            value="save"
+                            class="btn btn-outline-primary px-4 fw-semibold w-100">
+                        💾 Save Bill
+                    </button>
+                </div>
+
+                {{-- EDIT MODE --}}
+                <div id="updateButtons" class="w-100 d-none">
+                    <button type="submit"
+                            class="btn btn-primary px-4 fw-semibold w-100">
+                        ♻️ Update Bill
+                    </button>
+                </div>
+
+            </div>
+
 
 
             </form>
@@ -338,12 +387,13 @@ function toggleWarranty() {
 }
 
 function toggleGuarantee() {
-    document.getElementById('guaranteeInput').classList.toggle('d-none');
+    document.getElementById('warrantyInput').classList.toggle('d-none');
 }
 
 function toggleBalance() {
-    document.getElementById('balanceInput').classList.toggle('d-none');
+    document.getElementById('balanceInput1').classList.toggle('d-none');
 }
+
 
 
 function calculateTotalLive() {
@@ -367,15 +417,17 @@ document.addEventListener('input', function (e) {
 });
 
 
-document.querySelector('input[name="balance"]')
-    ?.addEventListener('input', function () {
+document.addEventListener('input', function (e) {
+    if (e.target.name === 'balance') {
         let total = parseFloat(document.getElementById('totalInput').value) || 0;
-        let balance = parseFloat(this.value) || 0;
+        let balance = parseFloat(e.target.value) || 0;
 
         if (balance > total) {
-            this.value = total;
+            e.target.value = total;
         }
-    });
+    }
+});
+
 
 function removeItem(btn) {
     let container = document.getElementById('itemsContainer');
@@ -392,7 +444,69 @@ function removeItem(btn) {
 
     calculateTotalLive();
 }
+
+function openEditBill(bill) {
+    // Mode
+    console.log(bill.id);
+    document.getElementById('billMode').value = 'edit';
+    document.getElementById('billId1').value = bill.id;
+
+    // Title
+    document.getElementById('billModalTitle').innerText = 'Edit Bill';
+
+    // Buttons
+    document.getElementById('createButtons').classList.add('d-none');
+    document.getElementById('updateButtons').classList.remove('d-none');
+
+    // Basic fields
+    document.querySelector('[name="customer_name"]').value = bill.customer_name;
+    document.querySelector('[name="bill_date"]').value = bill.bill_date;
+    document.querySelector('[name="balance1"]').value = bill.balance ?? '';
+    if(bill.balance > 0){
+        document.querySelector('[name="is_balance1"]').checked = 1;
+        toggleBalance();
+    }
+    document.querySelector('[name="whatsapp_number"]').value = bill.whatsapp_number ?? '';
+
+    // Checkboxes
+    document.querySelector('[name="is_sign"]').checked = bill.is_sign == 1;
+    document.querySelector('[name="is_stamp"]').checked = bill.is_stamp == 1;
+    document.querySelector('[name="is_warranty"]').checked = bill.is_warranty == 1;
+    //document.querySelector('[name="is_guarantee"]').checked = bill.is_guarantee == 1;
+    if(bill.is_warranty == 1){
+        document.querySelector('[name="details"]').value = bill.details;
+        toggleWarranty();
+    }
+  
+    // Clear items
+   const container = document.getElementById('itemsContainer');
+container.innerHTML = '';
+
+const template = document.querySelector('#itemRowTemplate .item-row');
+
+if (!template) {
+    console.error('Item template not found');
+    return;
+}
+
+if (bill.items && bill.items.length > 0) {
+    bill.items.forEach(item => {
+        const row = template.cloneNode(true);
+
+        row.querySelector('[name="item_name[]"]').value = item.item_name;
+        row.querySelector('[name="quantity[]"]').value = item.quantity;
+        row.querySelector('[name="price[]"]').value = item.price;
+
+        container.appendChild(row);
+    });
+}
+
+    calculateTotalLive();
+
+    new bootstrap.Modal(document.getElementById('billModal')).show();
+}
 </script>
+
 
 
 

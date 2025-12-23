@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\BillController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 
@@ -22,6 +22,9 @@ Route::middleware(['checkedloggedin'])->group(function () {
 });
 
 Route::view('/privacy-policy', 'legal.privacy-policy')->name('privacy.policy');
+Route::get('/bill/{bill}/pdf', [BillController::class, 'generatePdfPublic'])
+    ->name('bill.pdf.public')
+    ->middleware('signed');
 
 
 

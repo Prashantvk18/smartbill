@@ -27,7 +27,10 @@
                             @else
                                 <span class="badge bg-warning text-dark">Trial</span>
                             @endif
-
+                            <button class="btn btn-outline-secondary btn-sm"
+                                onclick="editShop({{ $shop->id }}, '{{ addslashes($shop->shop_name) }}', '{{ addslashes($shop->address) }}')">
+                                ✏️ Edit
+                            </button>
                             @if($shop->is_paid)
                                 <!-- PAID SHOP -->
                                 <a href="{{ route('shop.dashboard', $shop->id) }}"
@@ -59,25 +62,70 @@
 
 <div class="modal fade" id="addShopModal">
     <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
-        <form method="POST" action="{{ route('shop.store') }}" class="modal-content">
+        <form method="POST"
+              action="{{ route('shop.store') }}"
+              enctype="multipart/form-data"
+              class="modal-content">
+
             @csrf
+            <input type="hidden" name="shop_id" id="shopId">
 
             <div class="modal-header">
-                <h5 class="modal-title">Add Shop</h5>
+                <h5 class="modal-title" id="shopModalTitle">Add Shop</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body">
-                <label class="form-label">Shop Name</label>
-                <input type="text" name="shop_name" class="form-control form-control-lg" required>
+
+                {{-- Shop Name --}}
+                <div class="mb-2">
+                    <label class="form-label">Shop Name</label>
+                    <input type="text"
+                           name="shop_name"
+                           id="shopName"
+                           class="form-control form-control-lg"
+                           required>
+                </div>
+
+                {{-- Address (optional) --}}
+                <div class="mb-2">
+                    <label class="form-label">Shop Address (optional)</label>
+                    <textarea name="address"
+                              id="shopAddress"
+                              class="form-control"
+                              rows="2"
+                              placeholder="Shop address"></textarea>
+                </div>
+
+                {{-- Signature --}}
+                <div class="mb-2">
+                    <label class="form-label">Signature (optional)</label>
+                    <input type="file"
+                           name="signature"
+                           class="form-control"
+                           accept="image/*">
+                </div>
+
+                {{-- Stamp --}}
+                <div class="mb-2">
+                    <label class="form-label">Stamp (optional)</label>
+                    <input type="file"
+                           name="stamp"
+                           class="form-control"
+                           accept="image/*">
+                </div>
+
             </div>
 
             <div class="modal-footer">
-                <button class="btn btn-primary w-100">Save Shop</button>
+                <button class="btn btn-primary w-100">
+                    Save Shop
+                </button>
             </div>
         </form>
     </div>
 </div>
+
 
 <div class="modal fade" id="subscriptionModal">
     <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
@@ -137,6 +185,15 @@ document.getElementById('subscriptionModal')
         document.getElementById('shopNameText').innerText =
             'Shop: ' + shopName;
     });
+
+    function editShop(id, name, address) {
+        document.getElementById('shopModalTitle').innerText = 'Edit Shop';
+        document.getElementById('shopId').value = id;
+        document.getElementById('shopName').value = name;
+        document.getElementById('shopAddress').value = address ?? '';
+
+        new bootstrap.Modal(document.getElementById('addShopModal')).show();
+    }
 </script>
 
 
